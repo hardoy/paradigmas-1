@@ -1,9 +1,24 @@
 class Jugador{
+    var equipo
+    var posicion
     var skills
     var peso
-    var posicion
+    var fuerza
     var escoba
-    var posicion = guardian
+    var otros
+   
+   constructor (_equipo, _posicion, _skills, _peso, _fuerza, _escoba, _otros) {
+        skills = _skills
+        peso = _peso
+        posicion = _posicion
+        escoba = _escoba
+    }
+    
+    method equipo() = equipo
+    method skills() = skills
+    method peso() = peso
+    method posicion() = posicion
+    method escoba() = escoba
    
     method nivelManejoEscoba() = skills / peso
 
@@ -27,4 +42,9 @@ class Jugador{
 		escoba.recibeGolpe()
 	}
 	
+	
 }
+
+
+
+
