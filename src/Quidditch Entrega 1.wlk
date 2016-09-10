@@ -59,13 +59,14 @@ class Jugador {
 		skills -= 2
 		escoba.recibeGolpe()
 	}
-	constructor(_posicion,_peso,_skills,_fuerza,_escoba,_otro) {
+	constructor(_posicion,_peso,_skills,_fuerza,_escoba,_punteria,_vision) {
 		posicion = _posicion
 		peso = _peso
 		skills = _skills
 		fuerza = _fuerza
 		escoba = _escoba
-		otro = _otro
+		punteria = _punteria
+		vision = _vision
 	}
 }
 
