@@ -67,7 +67,6 @@ test "Fred Weasley debería pasarle el trapo a Miles Bletchley pero no a Warring
 	assert.notThat(fredWeasley.lePasaElTrapoA(warrington))
 }
 
-
 test "De Gryffindor sólo Fred, Angelina y Katie son grosos, de Slytherin sólo Warrington y Montague."{
 	var angelinaJohnson = new Jugador(cazador, 40.0, 55.0, 40.0, saetaDeFuego, 3.0, 0.0)
 	var fredWeasley = new Jugador(golpeador, 80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0, 0.0)
@@ -97,7 +96,6 @@ test "De Gryffindor sólo Fred, Angelina y Katie son grosos, de Slytherin sólo 
 	assert.that(slytherin.jugadoresGrosos().contains(grahamMontague))
 	assert.that(slytherin.jugadoresGrosos().size() == 2)
 // a ver si a alguien se le ocurre como hacerlo prolijo, lo hice así para ver si funcionaba
-
 }
 
 test "Slytherin tiene jugador estrella contra Gryffindor, la inversa no es cierta."{
