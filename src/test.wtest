@@ -1,7 +1,6 @@
 import prueba.*
 
-test "a ver si el niño sobrevive a esto (esta prueba no es parte de los test del tp, despues lo borramos)" {
-	
+test "a ver si el niÃ±o sobrevive a esto (esta prueba no es parte de los test del tp, despues lo borramos)" {
 	var harryPotter = new Jugador(buscador, 30.0, 60.0, 80.0, saetaDeFuego, 0.0, 2.0)
 
 	assert.that(harryPotter.posicion() == buscador)
@@ -13,16 +12,14 @@ test "a ver si el niño sobrevive a esto (esta prueba no es parte de los test del
 	assert.that(harryPotter.vision() == 2.0)
 }
 
-test "Harry Potter debería tener 0,5 de manejo de escoba."{
-	
+test "Harry Potter deberÃ­a tener 0,5 de manejo de escoba."{
 	var harryPotter = new Jugador(buscador, 30.0, 60.0, 80.0, saetaDeFuego, 0.0, 2.0)
 
 	assert.equals(harryPotter.manejoDeEscoba(), 0.5)
 }
 
-test "La escoba de Ron Weasley debería tener una velocidad de 32 con lo cual su velocidad sería 16.
- Draco Malfoy debería tener una velocidad de 35,1."{
- 	
+test "La escoba de Ron Weasley deberÃ­a tener una velocidad de 32 con lo cual su velocidad serÃ­a 16.
+Draco Malfoy deberÃ­a tener una velocidad de 35,1."{
  	var ronWeasley = new Jugador(guardian, 30.0, 60.0, 50.0, new Nimbus(2001,50), 0.0, 0.0)
  	var dracoMalfoy = new Jugador(buscador, 27.0, 50.0, 30.0, new Nimbus(2001,100), 0.0, 7.0)
  
@@ -31,37 +28,37 @@ test "La escoba de Ron Weasley debería tener una velocidad de 32 con lo cual su 
  	assert.equals(dracoMalfoy.velocidad(), 35.1)
  }
 
-test "Harry Potter debería tener una velocidad 50."{
+test "Harry Potter deberÃ­a tener una velocidad 50."{
 	var harryPotter = new Jugador(buscador, 30.0, 60.0, 80.0, saetaDeFuego, 0.0, 2.0)
 
  	assert.equals(harryPotter.velocidad(), 50.0)
 }
 
-test "Harry Potter, por ser buscador, debería tener una habilidad de 110."{
+test "Harry Potter, por ser buscador, deberÃ­a tener una habilidad de 110."{
 	var harryPotter = new Jugador(buscador, 30.0, 60.0, 80.0, saetaDeFuego, 0.0, 2.0)
 
  	assert.equals(harryPotter.habilidad(), 110.0)
 }
 
-test "Ginny Weasley, por ser cazadora, debería tener una habilidad de 282."{
+test "Ginny Weasley, por ser cazadora, deberÃ­a tener una habilidad de 282."{
 	var ginnyWeasley = new Jugador(cazador, 50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0, 0.0)
 
 	assert.equals(ginnyWeasley.habilidad(), 282.0)
 }
 
-test "Fred Weasley, por ser golpeador, debería tener una habilidad de 240."{
+test "Fred Weasley, por ser golpeador, deberÃ­a tener una habilidad de 240."{
 	var fredWeasley = new Jugador(golpeador, 80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0, 0.0)
 	
 	assert.equals(fredWeasley.habilidad(), 240.0)
 }
 
-test "Ron Weasley, por ser guardián, debería tener una habilidad de 120,8."{
+test "Ron Weasley, por ser guardiÃ¡n, deberÃ­a tener una habilidad de 120,8."{
 	var ronWeasley = new Jugador(guardian, 30.0, 60.0, 50.0, new Nimbus(2001,50), 0.0, 0.0)
 	
 	assert.equals(ronWeasley.habilidad(), 120.8)
 }
 
-test "Fred Weasley debería pasarle el trapo a Miles Bletchley pero no a Warrington."{
+test "Fred Weasley deberÃ­a pasarle el trapo a Miles Bletchley pero no a Warrington."{
 	var fredWeasley = new Jugador(golpeador, 80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0, 0.0)
 	var warrington = new Jugador(cazador, 32.0, 50.0, 70.0, saetaDeFuego, 5.0, 0.0)
 	var milesBletchley = new Jugador(guardian, 20.0, 80.0, 50.0, saetaDeFuego, 0.0, 0.0)
@@ -71,7 +68,7 @@ test "Fred Weasley debería pasarle el trapo a Miles Bletchley pero no a Warringt
 }
 
 
-test "De Gryffindor sólo Fred, Angelina y Katie son grosos, de Slytherin sólo Warrington y Montague."{
+test "De Gryffindor sÃ³lo Fred, Angelina y Katie son grosos, de Slytherin sÃ³lo Warrington y Montague."{
 	var angelinaJohnson = new Jugador(cazador, 40.0, 55.0, 40.0, saetaDeFuego, 3.0, 0.0)
 	var fredWeasley = new Jugador(golpeador, 80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0, 0.0)
 	var katieBell = new Jugador(cazador, 45.0, 60.0, 30.0,  saetaDeFuego, 4.0, 0.0)
@@ -99,7 +96,7 @@ test "De Gryffindor sólo Fred, Angelina y Katie son grosos, de Slytherin sólo Wa
 	assert.that(slytherin.jugadoresGrosos().contains(warrington))
 	assert.that(slytherin.jugadoresGrosos().contains(grahamMontague))
 	assert.that(slytherin.jugadoresGrosos().size() == 2)
-// a ver si a alguien se le ocurre como hacerlo prolijo, lo hice así para ver si funcionaba
+// a ver si a alguien se le ocurre como hacerlo prolijo, lo hice asÃ­ para ver si funcionaba
 
 }
 
@@ -131,7 +128,6 @@ test "Si Crabbe es golpeado por una bludger sus skills pasan a ser 78."{
 	vincentCrabbe.bludgereado()
 	
 	assert.equals(vincentCrabbe.skills(),78.00)
-	
 }
 
 test "Si Ron es golpeado por una bludger sus skills pasan a ser 28 y su Nimbus queda con 40% de salud."{
