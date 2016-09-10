@@ -1,4 +1,4 @@
-import prueba.*
+import partido.*
 
 test "a ver si el niño sobrevive a esto (esta prueba no es parte de los test del tp, despues lo borramos)" {
 	var harryPotter = new Jugador(buscador, 30.0, 60.0, 80.0, saetaDeFuego, 0.0, 2.0)
