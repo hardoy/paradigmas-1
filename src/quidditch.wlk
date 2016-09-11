@@ -58,6 +58,9 @@ class Jugador {
 		skills -= 2
 		escoba.recibeGolpe()
 	}
+	method reflejos() {
+		return posicion.reflejosPorPosicion() + self.velocidad() * self.skills() / 100
+	}
 }
 
 
@@ -133,25 +136,31 @@ object cazador {
 	method habilidadPosicion(jugador) {
 		return jugador.velocidad() + jugador.skills() + jugador.punteria() * jugador.fuerza()
 	}
+	method reflejosPorPosicion() {
+		return 0
+	}
 }
 object golpeador {
 	method habilidadPosicion(jugador) {
 		return jugador.velocidad() + jugador.skills() + jugador.punteria() + jugador.fuerza()
 	}
+	method reflejosPorPosicion() {
+		return 0
+	}
 }
 object guardian {
 	method habilidadPosicion(jugador) {
-		return jugador.velocidad() + jugador.skills() + self.reflejos(jugador) + jugador.fuerza()
+		return jugador.velocidad() + jugador.skills() + jugador.reflejos() + jugador.fuerza()
 	}
-	method reflejos(jugador) {
-		return 20 + jugador.velocidad() * jugador.skills() / 100
+	method reflejosPorPosicion() {
+		return 20
 	}
 }
 object buscador {
 	method habilidadPosicion(jugador) {
-		return jugador.velocidad() + jugador.skills() + self.reflejos(jugador) * jugador.vision()
+		return jugador.velocidad() + jugador.skills() + jugador.reflejos() * jugador.vision()
 	}
-	method reflejos(jugador) {
-		return jugador.velocidad() * jugador.skills() / 100
+	method reflejosPorPosicion() {
+		return 0
 	}
 }
