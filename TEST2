@@ -212,8 +212,8 @@ test "probar si funciona ganaLaQuaffle() cuando un guardian gana la quaffle"{
 								harryPotter])
 	
 	gryffindor.ganaLaQuaffle()
-	assert.that(angelinaJohnson.tieneLaQuaffle())
-} // este test no esta funcionando
+	assert.that(ginnyWeasley.tieneLaQuaffle())
+} 
 
 
 
