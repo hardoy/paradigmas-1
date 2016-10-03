@@ -198,6 +198,23 @@ test "probar metodo jugadoresQuePuedenTenerQuaffle() del equipo"{
 }
 
 
+test "probar si funciona ganaLaQuaffle() cuando un guardian gana la quaffle"{
+	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
+	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var inamoto = new Guardian(150.0, 65.0, 99.0, saetaDeFuego)
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)	
+	
+	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, 
+								georgeWeasley, ginnyWeasley, inamoto, 
+								harryPotter])
+	
+	gryffindor.ganaLaQuaffle()
+	assert.that(angelinaJohnson.tieneLaQuaffle())
+} // este test no esta funcionando
+
 
 
 // test del tp
