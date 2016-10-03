@@ -124,7 +124,7 @@ class Guardian inherits Jugador {
 	override method ganaLaQuaffle(listaDeJugadores){
 		listaDeJugadores.remove(self)
 		listaDeJugadores.find({jugador => jugador.esMasHabilidosoQue(listaDeJugadores)}).ganaLaQuaffle(listaDeJugadores)
-	} // este metodo no esta funcionando, si pongo listaDeJugadores.remove(self).find... tampoco funciona. Es como si el remove removiera pero no devuelve una lista (cuando lo probe devolvio null, sera eso?)
+	}
 }
 class Buscador inherits Jugador {
 	var vision
