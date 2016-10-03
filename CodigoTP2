@@ -1,0 +1,217 @@
+class Jugador {
+	var skills
+	var peso
+	var fuerza
+	var escoba
+	var equipo
+	constructor(_skills,_peso,_fuerza,_escoba, _equipo) {
+		skills = _skills
+		peso = _peso
+		fuerza = _fuerza
+		escoba = _escoba
+		equipo = _equipo
+	}
+	
+	// Getters
+	method skills() {
+		return skills
+	}
+	method peso() {
+		return peso
+	}
+	method fuerza() {
+		return fuerza
+	}
+	method escoba() {
+		return escoba
+	}
+	method equipo() {
+		return equipo
+	}
+	method velocidadDeEscoba() {
+		return escoba.velocidadEscoba()
+	}
+	method saludDeEscoba() {
+		return escoba.saludEscoba()
+	}
+	
+	// Calculos para habilidad
+	method manejoDeEscoba() {
+		return skills / peso
+	}
+	method velocidad() {
+		return escoba.velocidadEscoba() * self.manejoDeEscoba()
+	}
+	method habilidad() {
+		return self.velocidad() + skills
+	}
+	
+	// Metodos para facilitar la busqueda de un jugador en un equipo
+	method esGroso(restoDeEquipo) {
+		return self.habilidad() > restoDeEquipo.promedioHabilidad() && self.velocidad() >= mercadoDeEscobas.velocidadMinimaParaSerGroso()
+	}
+	method esJugadorEstrella(equipoRival){
+		return equipoRival.jugadores().all({jugadorRival => self.lePasaElTrapoA(jugadorRival)})
+	}
+	method esMasVelozQue(listaDeJugadores){
+		return listaDeJugadores.jugadores().all({jugador => self.velocidad() >= jugador.velocidad()})
+	}
+	
+	// Metodos para el juego
+	method lePasaElTrapoA(otroJugador) {
+		return self.habilidad() >= 2.0 * otroJugador.habilidad()
+	}
+	method bludgereado() {
+		skills -= 2
+		escoba.recibeGolpe()
+	}
+	method puedeTenerLaQuaffle() = return false
+	method ganarQuaffle(){}
+}
+
+class Equipo {
+	var jugadores
+	constructor(_jugadores) {
+		jugadores = _jugadores
+	}
+	method jugadores() {
+		return jugadores
+	}
+	method promedioHabilidad() {
+		return jugadores.sum({unJugador => unJugador.habilidad()}) / jugadores.size() 
+	}
+	method jugadoresGrosos() {
+		return jugadores.filter({unJugador => unJugador.esGroso(self)})
+	}
+	method tieneJugadorEstrellaParaJugarContra(otroEquipo) {
+		return jugadores.any({unJugador => unJugador.esJugadorEstrella(otroEquipo)})
+	}
+	method tieneLaQuaffle(){
+		return jugadores.any({unJugador => unJugador.tieneLaQuaffle()})
+	}
+	method jugadoresQuePuedenTenerQuaffle(){
+		return jugadores.filter({unJugador => unJugador.puedeTenerLaQuaffle()})
+	}
+/*	method jugadoresMazVelozQuePuedaTenerQuaffle(){
+		return self.jugadoresQuePuedenTenerQuaffle().find({jugador => jugador.esMasVelozQue(self.jugadoresQuePuedenTenerQuaffle())})
+	} // no se como mierda hacer este metodo sin que sea tan choto!!!  
+	
+	method jugadorMasVeloz(){
+		return jugadores.find({unJugador => unJugador.esMasVelozQue(self)})
+	} 
+	
+	method ganarQuaffle(){
+		// no se como manejar sin un if
+		self.jugadorMasVeloz().ganarQuaffle()
+	}*/
+}
+
+object mercadoDeEscobas {
+	var velocidadMinimaParaSerGroso
+	method velocidadMinimaParaSerGroso() {
+		return velocidadMinimaParaSerGroso
+	}
+	method velocidadMinimaParaSerGroso(nuevaVelocidad) {
+		velocidadMinimaParaSerGroso = nuevaVelocidad
+	}
+}
+class Nimbus {
+	var modelo
+	var salud
+	constructor(_modelo,_salud) {
+		modelo = _modelo
+		salud = _salud
+	}
+	method velocidadEscoba() {
+		return (80 - (new Date().year() - modelo)) * salud / 100
+	}
+	method saludEscoba() {
+		return salud
+	}
+	method recibeGolpe() {
+		salud -= 10
+	}
+}
+object saetaDeFuego {
+	method velocidadEscoba() {
+		return 100
+	}
+	method saludEscoba() {
+		return 100
+	}
+	method recibeGolpe() {
+
+	}
+}
+
+class Cazador inherits Jugador {
+	var punteria
+	constructor(_skills,_peso,_fuerza,_escoba, _equipo,_punteria) = super(_skills,_peso,_fuerza, _equipo,_escoba) {
+		punteria = _punteria
+	}
+	method punteria() {
+		return punteria
+	}
+	override method habilidad() {
+		return punteria * fuerza + super()
+	}
+	override method puedeTenerLaQuaffle()= return true
+}
+class Golpeador inherits Jugador {
+	var punteria
+	constructor(_skills,_peso,_fuerza,_escoba, _equipo,_punteria) = super(_skills,_peso,_fuerza,_escoba, _equipo) {
+		punteria = _punteria
+	}
+	method punteria() {
+		return punteria
+	}
+	override method habilidad() {
+		return punteria + fuerza + super()
+	}
+}
+class Guardian inherits Jugador {
+	constructor(_skills,_peso,_fuerza,_escoba, _equipo) = super(_skills,_peso,_fuerza,_escoba, _equipo)
+	override method habilidad() {
+		return self.reflejos() + fuerza + super()
+	}
+	method reflejos() {
+		return 20 + self.velocidad() * skills / 100
+	}
+	override method puedeTenerLaQuaffle()= return true
+}
+class Buscador inherits Jugador {
+	var vision
+	constructor(_skills,_peso,_fuerza,_escoba, _equipo,_vision) = super(_skills,_peso,_fuerza,_escoba, _equipo) {
+		vision = _vision
+	}
+	override method habilidad() {
+		return self.reflejos() * vision + super()
+	}
+	method reflejos() {
+		return self.velocidad() * skills / 100
+	}
+}
+
+
+
+object suerte {
+    var tipoDeSuerte = suerteReal
+    method tipoDeSuerte(_tipoDeSuerte){
+   	 tipoDeSuerte = _tipoDeSuerte
+    }
+    method tieneSuerte(){
+   	 return tipoDeSuerte.tieneSuerte()
+    }
+}
+
+object suerteReal{
+    method tieneSuerte() = (1..5).anyOne() == 1
+}
+
+object malaSuerte{
+    method tieneSuerte() = false
+}
+
+object buenaSuerte{
+    method tieneSuerte() = true
+}
