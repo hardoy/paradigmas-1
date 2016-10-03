@@ -1,4 +1,1 @@
-[![Captura.jpg](https://s10.postimg.org/lewqwwfjt/Captura.jpg)](https://postimg.org/image/voz5w55f9/)
-
-
 ![alt text](https://s10.postimg.org/lewqwwfjt/Captura.jpg)
