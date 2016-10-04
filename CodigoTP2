@@ -4,6 +4,7 @@ class Jugador {
 	var fuerza
 	var escoba
 	var tieneLaQuaffle = false
+	var equipo
 	constructor(_skills,_peso,_fuerza,_escoba) {
 		skills = _skills
 		peso = _peso
@@ -33,6 +34,12 @@ class Jugador {
 	}
 	method tieneLaQuaffle(){
 		return tieneLaQuaffle 
+	}
+	method equipo(){
+		return equipo
+	}
+	method asignarEquipo(equipoNuevo){
+		equipo = equipoNuevo
 	}
 	
 	// Calculos para habilidad
@@ -207,6 +214,7 @@ class Equipo {
 	var puntos = 0
 	constructor(_jugadores) {
 		jugadores = _jugadores
+		jugadores.map({ unJugador => unJugador.asignarEquipo(self) })
 	}
 	method jugadores() {
 		return jugadores
