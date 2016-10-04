@@ -6,56 +6,33 @@ class Jugador {
 	var tieneLaQuaffle = false
 	var equipo
 	constructor(_skills,_peso,_fuerza,_escoba) {
-		skills = _skills
-		peso = _peso
-		fuerza = _fuerza
-		escoba = _escoba
+		skills 	= 	_skills
+		peso 	=	_peso
+		fuerza 	= 	_fuerza
+		escoba 	= 	_escoba
 	}
 	
 	// Getters&Setters
-	method skills() {
-		return skills
-	}
-	method modificarSkills(num){ skills =+ num }
-	method peso() {
-		return peso
-	}
-	method fuerza() {
-		return fuerza
-	}
-	method escoba() {
-		return escoba
-	}
-	method velocidadDeEscoba() {
-		return escoba.velocidadEscoba()
-	}
-	method saludDeEscoba() {
-		return escoba.saludEscoba()
-	}
-	method tieneLaQuaffle(){
-		return tieneLaQuaffle 
-	}
-	method equipo(){
-		return equipo
-	}
-	method asignarEquipo(equipoNuevo){
-		equipo = equipoNuevo
-	}
+	method skills() = 		return skills
+	method modificarSkills(num)	{ skills =+ num }
+	method peso() =			return peso
+	method fuerza() = 		return fuerza
+	method escoba() = 		return escoba
+	method velocidadDeEscoba() = 	return escoba.velocidadEscoba()
+	method saludDeEscoba() = 	return escoba.saludEscoba()
+	method tieneLaQuaffle() =	return tieneLaQuaffle 
+	method equipo() =		return equipo
+	method asignarEquipo(suEquipo)	{ equipo = suEquipo }
 	
 	// Calculos para habilidad
-	method manejoDeEscoba() {
-		return skills / peso
-	}
-	method velocidad() {
-		return escoba.velocidadEscoba() * self.manejoDeEscoba()
-	}
-	method habilidad() {
-		return self.velocidad() + skills
-	}
+	method manejoDeEscoba() =		return skills / peso
+	method velocidad() =			return escoba.velocidadEscoba() * self.manejoDeEscoba()
+	method habilidad() =			return self.velocidad() + skills
 	
-	// Metodos para facilitar la busqueda de un jugador en un equipo
-	method esGroso(restoDeEquipo) {
-		return self.habilidad() > restoDeEquipo.promedioHabilidad() && self.velocidad() >= mercadoDeEscobas.velocidadMinimaParaSerGroso()
+	// Metodos para facilitar la busqueda de un jugador en un colección
+	method esGroso() {
+		return self.habilidad() > equipo.promedioHabilidad() 
+		&& self.velocidad() >= mercadoDeEscobas.velocidadMinimaParaSerGroso()
 	}
 	method esJugadorEstrella(equipoRival){
 		return equipoRival.jugadores().all({jugadorRival => self.lePasaElTrapoA(jugadorRival)})
@@ -68,19 +45,17 @@ class Jugador {
 	}
 	
 	// Metodos para el juego
-	method lePasaElTrapoA(otroJugador) {
-		return self.habilidad() >= 2.0 * otroJugador.habilidad()
-	}
-	method bludgereado(equipo) {
+	method lePasaElTrapoA(otroJug)=	return self.habilidad() >= 2.0 * otroJug.habilidad()
+	method bludgereado() {
 		skills -= 2
 		escoba.recibeGolpe()
 		tieneLaQuaffle = false
 	}
-	method puedeTenerLaQuaffle() = return false
+	method puedeTenerLaQuaffle() = 	return false
 	method ganaLaQuaffle(listaDeJugadores){}
 	method pierdeLaQuaffle(){}
 	method esBlancoUtil(equipoRival){ return self.esJugadorEstrella(equipoRival) || self.tieneLaQuaffle() }
-	method hacerJugada(equipo, rival){}
+	method hacerJugada(rival){}
 }
 
 
@@ -91,19 +66,11 @@ class Cazador inherits Jugador {
 	constructor(_skills,_peso,_fuerza,_escoba,_punteria) = super(_skills,_peso,_fuerza,_escoba) {
 		punteria = _punteria
 	}
-	method punteria() {
-		return punteria
-	}
-	override method habilidad() {
-		return punteria * fuerza + super()
-	}
-	override method puedeTenerLaQuaffle()= return true
-	override method ganaLaQuaffle(listaDeJugadores){
-		tieneLaQuaffle = true
-	}
-	override method pierdeLaQuaffle(){
-		tieneLaQuaffle = false
-	}
+	method punteria() =					return punteria
+	override method habilidad() =				return punteria * fuerza + super()
+	override method puedeTenerLaQuaffle()= 			return true
+	override method ganaLaQuaffle(listaDeJugadores)		{tieneLaQuaffle = true }
+	override method pierdeLaQuaffle() 			{tieneLaQuaffle = false}
 	
 }
 
