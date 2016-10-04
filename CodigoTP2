@@ -11,10 +11,11 @@ class Jugador {
 		escoba = _escoba
 	}
 	
-	// Getters
+	// Getters&Setters
 	method skills() {
 		return skills
 	}
+	method modificarSkills(num){ skills =+ num }
 	method peso() {
 		return peso
 	}
@@ -63,7 +64,7 @@ class Jugador {
 	method lePasaElTrapoA(otroJugador) {
 		return self.habilidad() >= 2.0 * otroJugador.habilidad()
 	}
-	method bludgereado() {
+	method bludgereado(equipo) {
 		skills -= 2
 		escoba.recibeGolpe()
 		tieneLaQuaffle = false
@@ -71,15 +72,13 @@ class Jugador {
 	method puedeTenerLaQuaffle() = return false
 	method ganaLaQuaffle(listaDeJugadores){}
 	method pierdeLaQuaffle(){}
-	method esBlancoUtil(equipoRival){
-		return self.esJugadorEstrella(equipoRival) || self.tieneLaQuaffle() // faltan otras condiciones
-		
-	}
+	method esBlancoUtil(equipoRival){ return self.esJugadorEstrella(equipoRival) || self.tieneLaQuaffle() }
+	method hacerJugada(equipo, rival){}
 }
 
 
 
-
+// Cazador (en construccion)
 class Cazador inherits Jugador {
 	var punteria
 	constructor(_skills,_peso,_fuerza,_escoba,_punteria) = super(_skills,_peso,_fuerza,_escoba) {
@@ -100,6 +99,8 @@ class Cazador inherits Jugador {
 	}
 	
 }
+
+// Golpeador (en construccion)
 class Golpeador inherits Jugador {
 	var punteria
 	constructor(_skills,_peso,_fuerza,_escoba,_punteria) = super(_skills,_peso,_fuerza,_escoba) {
@@ -111,7 +112,18 @@ class Golpeador inherits Jugador {
 	override method habilidad() {
 		return punteria + fuerza + super()
 	}
+	override method hacerJugada(equipo,rival){
+		if( self.elegirBlancoUtil(rival).reflejos() < self.punteria() ){
+			self.modificarSkills(5)
+			self.elegirBlancoUtil(rival).bludgereado(rival)
+		}
+	}
+	method elegirBlancoUtil(rival){
+			return rival.jugadorUtiles().find({unJugador => unJugador.esMasHabilidosoQue(rival.jugadorUtiles())})
+	}
 }
+
+// Guardian (en construccion)
 class Guardian inherits Jugador {
 	constructor(_skills,_peso,_fuerza,_escoba) = super(_skills,_peso,_fuerza,_escoba)
 	override method habilidad() {
@@ -124,37 +136,91 @@ class Guardian inherits Jugador {
 	override method ganaLaQuaffle(listaDeJugadores){
 		listaDeJugadores.remove(self)
 		listaDeJugadores.find({jugador => jugador.esMasHabilidosoQue(listaDeJugadores)}).ganaLaQuaffle(listaDeJugadores)
-	}
+	} // este metodo no esta funcionando, si pongo listaDeJugadores.remove(self).find... tampoco funciona. En el ultimo caso es como si el remove removiera pero no devuelve una lista (cuando lo probe devolvio null)
 }
+
+// Buscador (en construccion)
 class Buscador inherits Jugador {
 	var vision
+	var actividad = busqueda
+	var tunosBuscando = 1
+	var metrosParaAtrapar = 5000
 	constructor(_skills,_peso,_fuerza,_escoba,_vision) = super(_skills,_peso,_fuerza,_escoba) {
 		vision = _vision
 	}
+
+	method actividad()= return actividad
+	method cambiarActividad(nuevaActividad){ actividad = nuevaActividad }
+	method metrosParaAtraparSnitch() = return metrosParaAtrapar
+	method reducirMetrosParaAtraparSnitch(){ metrosParaAtrapar =- self.velocidad() * 2 }
+	method atrapaLaSnitch(equipo) = equipo.ganaPuntos(150)
+
 	override method habilidad() {
 		return self.reflejos() * vision + super()
 	}
 	method reflejos() {
 		return self.velocidad() * skills / 100
 	}
-	
+	method reiniciarBusqueda(){
+		actividad = busqueda
+		tunosBuscando = 1
+		metrosParaAtrapar = 5000
+	}
+	override method bludgereado(equipoPropio){
+		super(equipoPropio)
+		if(self.esGroso(equipoPropio)){
+			aturdido.guardarActividadAnterior(actividad)
+			actividad = aturdido
+		}
+		else{self.reiniciarBusqueda()}
+	}
+	override method hacerJugada(equipo, rival){ actividad.realizarla(equipo, self) }
+	override method esBlancoUtil(equipo){
+		return super(equipo) || (actividad === persecucion && metrosParaAtrapar < 1000)
+		
+	}
+}
+object busqueda{
+	method realizarla(equipo, unJugador){
+	// en construccion	
+	}
+}
+object persecucion{
+	method realizarla(equipo, unJugador){
+		unJugador.reducirMetrosParaAtraparSnitch()
+		if(unJugador.metrosParaAtrapar() <= 0) { 
+			unJugador.atrapaLaSnitch(equipo)
+			unJugador.modificarSkills(30)
+		}
+	}
+}
+object aturdido{
+	var estadoAnteriorASerGolpeado
+	method realizarla(equipo, unJugador){ unJugador.cambiarActividad(estadoAnteriorASerGolpeado) }
+	method guardarActividadAnterior(actividad){ estadoAnteriorASerGolpeado = actividad }
 }
 
 
 // equipo
 class Equipo {
 	var jugadores
+	var puntos = 0
 	constructor(_jugadores) {
 		jugadores = _jugadores
 	}
 	method jugadores() {
 		return jugadores
 	}
+	method puntos() = return puntos
+	method ganarPuntos(nuevosPuntos) { puntos =+ nuevosPuntos}
 	method promedioHabilidad() {
 		return jugadores.sum({unJugador => unJugador.habilidad()}) / jugadores.size() 
 	}
 	method jugadoresGrosos() {
 		return jugadores.filter({unJugador => unJugador.esGroso(self)})
+	}
+	method jugadorUtiles() {
+		return jugadores.filter({unJugador => unJugador.esBlancoUtil(self)})
 	}
 	method tieneJugadorEstrellaParaJugarContra(otroEquipo) {
 		return jugadores.any({unJugador => unJugador.esJugadorEstrella(otroEquipo)})
