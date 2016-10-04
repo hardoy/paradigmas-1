@@ -192,7 +192,7 @@ class Equipo {
 		return jugadores.sum({unJugador => unJugador.habilidad()}) / jugadores.size() 
 	}
 	method jugadoresGrosos() {
-		return jugadores.filter({unJugador => unJugador.esGroso(self)})
+		return jugadores.filter({unJugador => unJugador.esGroso()})
 	}
 	method jugadorUtiles() {
 		return jugadores.filter({unJugador => unJugador.esBlancoUtil(self)})
