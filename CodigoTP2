@@ -80,13 +80,9 @@ class Golpeador inherits Jugador {
 	constructor(_skills,_peso,_fuerza,_escoba,_punteria) = super(_skills,_peso,_fuerza,_escoba) {
 		punteria = _punteria
 	}
-	method punteria() {
-		return punteria
-	}
-	override method habilidad() {
-		return punteria + fuerza + super()
-	}
-	override method hacerJugada(equipo,rival){
+	method punteria() =		return punteria
+	override method habilidad() =	return punteria + fuerza + super()
+	override method hacerJugada(rival){
 		if( self.elegirBlancoUtil(rival).reflejos() < self.punteria() ){
 			self.modificarSkills(5)
 			self.elegirBlancoUtil(rival).bludgereado(rival)
@@ -100,17 +96,15 @@ class Golpeador inherits Jugador {
 // Guardian (en construccion)
 class Guardian inherits Jugador {
 	constructor(_skills,_peso,_fuerza,_escoba) = super(_skills,_peso,_fuerza,_escoba)
-	override method habilidad() {
-		return self.reflejos() + fuerza + super()
-	}
-	method reflejos() {
-		return 20 + self.velocidad() * skills / 100
-	}
-	override method puedeTenerLaQuaffle()= return true
+	
+	override method habilidad() =		return self.reflejos() + fuerza + super()
+	method reflejos() =			return 20 + self.velocidad() * skills / 100
+	override method puedeTenerLaQuaffle() =	return true
+	
 	override method ganaLaQuaffle(listaDeJugadores){
 		listaDeJugadores.remove(self)
 		listaDeJugadores.find({jugador => jugador.esMasHabilidosoQue(listaDeJugadores)}).ganaLaQuaffle(listaDeJugadores)
-	} // este metodo no esta funcionando, si pongo listaDeJugadores.remove(self).find... tampoco funciona. En el ultimo caso es como si el remove removiera pero no devuelve una lista (cuando lo probe devolvio null)
+	}
 }
 
 // Buscador (en construccion)
@@ -123,57 +117,56 @@ class Buscador inherits Jugador {
 		vision = _vision
 	}
 
-	method actividad()= return actividad
-	method cambiarActividad(nuevaActividad){ actividad = nuevaActividad }
-	method metrosParaAtraparSnitch() = return metrosParaAtrapar
-	method reducirMetrosParaAtraparSnitch(){ metrosParaAtrapar =- self.velocidad() * 2 }
-	method atrapaLaSnitch(equipo) = equipo.ganaPuntos(150)
-
-	override method habilidad() {
-		return self.reflejos() * vision + super()
-	}
-	method reflejos() {
-		return self.velocidad() * skills / 100
-	}
+	method actividad()= 			return actividad
+	method cambiarActividad(nuevaActividad)	{ actividad = nuevaActividad }
+	method metrosParaAtraparSnitch() =	return metrosParaAtrapar
+	method reducirMetrosParaAtraparSnitch()	{ metrosParaAtrapar =- self.velocidad() * 2 }
+	method atrapaLaSnitch(equipo){
+		equipo.ganaPuntos(150)
+		self.modificarSkills(30)
+		}
+	override method habilidad() =		return self.reflejos() * vision + super()
+	method reflejos() =			return self.velocidad() * skills / 100
 	method reiniciarBusqueda(){
 		actividad = busqueda
 		tunosBuscando = 1
 		metrosParaAtrapar = 5000
 	}
-	override method bludgereado(equipoPropio){
-		super(equipoPropio)
-		if(self.esGroso(equipoPropio)){
+	override method bludgereado(){
+		super()
+		if(self.esGroso()){
 			aturdido.guardarActividadAnterior(actividad)
 			actividad = aturdido
 		}
 		else{self.reiniciarBusqueda()}
 	}
-	override method hacerJugada(equipo, rival){ actividad.realizarla(equipo, self) }
-	override method esBlancoUtil(equipo){
-		return super(equipo) || (actividad === persecucion && metrosParaAtrapar < 1000)
-		
+	override method hacerJugada(rival)	{ actividad.realizarla(equipo, self) }
+	override method esBlancoUtil(equipoRival){
+		return super(equipoRival) || (actividad === persecucion && metrosParaAtrapar < 1000)
 	}
 }
+
 object busqueda{
-	method realizarla(equipo, unJugador){
+	method realizarla(unJugador){
 	// en construccion	
 	}
 }
+
 object persecucion{
-	method realizarla(equipo, unJugador){
+	method realizarla(unJugador){
 		unJugador.reducirMetrosParaAtraparSnitch()
 		if(unJugador.metrosParaAtrapar() <= 0) { 
-			unJugador.atrapaLaSnitch(equipo)
+			unJugador.atrapaLaSnitch(unJugador.equipo())
 			unJugador.modificarSkills(30)
 		}
 	}
 }
+
 object aturdido{
 	var estadoAnteriorASerGolpeado
-	method realizarla(equipo, unJugador){ unJugador.cambiarActividad(estadoAnteriorASerGolpeado) }
-	method guardarActividadAnterior(actividad){ estadoAnteriorASerGolpeado = actividad }
+	method realizarla(unJugador)			{ unJugador.cambiarActividad(estadoAnteriorASerGolpeado) }
+	method guardarActividadAnterior(actividad)	{ estadoAnteriorASerGolpeado = actividad }
 }
-
 
 // equipo
 class Equipo {
