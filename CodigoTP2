@@ -51,7 +51,7 @@ class Jugador {
 		escoba.recibeGolpe()
 		tieneLaQuaffle = false
 	}
-	method skillsGanadosPorBloquear() =		skills + 3
+	method skillsGanadosPorBloquear() =		{ skills += 3 }
 	method puedeTenerLaQuaffle() = 			return false
 	method esBlancoUtil(equipoRival)=		return self.esJugadorEstrella(equipoRival) || self.tieneLaQuaffle()
 	method verSiPuedeBloquearA(cazador) = 		return self.lePasaElTrapoA(cazador) || suerte.tieneSuerte()
@@ -78,11 +78,11 @@ class Cazador inherits Jugador {
 		var alguienQuePudoBloquar_OElMismo = rival.tratarDeBloquearA(self)
 		if(alguienQuePudoBloquar_OElMismo === self){
 			self.equipo().ganarPuntos(10)
-			self.modificarSkills(5)
+			skills += 5
 		}
 		else{
 			alguienQuePudoBloquar_OElMismo.skillsGanadosPorBloquear()
-			self.modificarSkills((-3))
+			skills -= 3
 		}
 		self.pierdeLaQuaffle()
 		rival.ganaLaQuaffle()
@@ -101,7 +101,7 @@ class Golpeador inherits Jugador {
 	override method habilidad() =	return punteria + fuerza + super()
 	override method hacerJugada(rival){
 		if( self.elegirBlancoUtil(rival).reflejos() < self.punteria() ){
-			self.modificarSkills(5)
+			skills += 5
 			self.elegirBlancoUtil(rival).bludgereado(rival)
 		}
 	}
@@ -116,7 +116,7 @@ class Guardian inherits Jugador {
 	override method habilidad() =			return self.reflejos() + fuerza + super()
 	method reflejos() =				return 20 + self.velocidad() * skills / 100
 	override method puedeTenerLaQuaffle()= 		return true
-	override method skillsGanadosPorBloquear() =	skills + 10
+	override method skillsGanadosPorBloquear()	{ skills += 10 }
 	
 	override method ganaLaQuaffle(listaDeJugadores){
 		listaDeJugadores.remove(self)
@@ -135,10 +135,11 @@ class Buscador inherits Jugador {
 	}
 
 	method actividad()= 			return actividad
+	method turnosBuscando() =		return tunosBuscando
 	method cambiarActividad(nuevaActividad)	{ actividad = nuevaActividad }
 	method metrosParaAtraparSnitch() = 	return metrosParaAtrapar
 	method reducirMetrosParaAtraparSnitch()	{ metrosParaAtrapar =- self.velocidad() * 2 }
-	method atrapaLaSnitch(equipo){
+	method atrapaLaSnitch(){
 		equipo.ganaPuntos(150)
 		self.modificarSkills(30)
 		}
@@ -166,16 +167,15 @@ class Buscador inherits Jugador {
 
 object busqueda{
 	method realizarla(unJugador){
-	// en construccion	
-	}
+	unJugador.turnosBuscando().times({if(suerte.tieneSuerte()){ unJugador.cambiarActividad(persecucion) }})	
+	} // no funciona
 }
 
 object persecucion{
 	method realizarla(unJugador){
 		unJugador.reducirMetrosParaAtraparSnitch()
 		if(unJugador.metrosParaAtrapar() <= 0) { 
-			unJugador.atrapaLaSnitch(unJugador.equipo())
-			unJugador.modificarSkills(30)
+			unJugador.atrapaLaSnitch()
 		}
 	}
 }
