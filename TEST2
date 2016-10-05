@@ -1,4 +1,4 @@
-//recuerden importar
+// recuerden importar
 
 test "Harry Potter deberia tener 0,5 de manejo de escoba."{
 	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
@@ -197,7 +197,6 @@ test "probar metodo jugadoresQuePuedenTenerQuaffle() del equipo"{
 	assert.equals(hogwarts.jugadoresQuePuedenTenerQuaffle().size(), 4)
 }
 
-
 test "probar si funciona ganaLaQuaffle() cuando un guardian gana la quaffle"{
 	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
 	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
@@ -212,9 +211,26 @@ test "probar si funciona ganaLaQuaffle() cuando un guardian gana la quaffle"{
 								harryPotter])
 	
 	gryffindor.ganaLaQuaffle()
+	assert.that(gryffindor.jugadores().contains(inamoto))
 	assert.that(ginnyWeasley.tieneLaQuaffle())
-} 
-
+}
+test "probando jugadoresOrdenadosPorVelocidad() de equipo"{
+	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
+	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var inamoto = new Guardian(150.0, 65.0, 99.0, saetaDeFuego)
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)	
+	
+	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, 
+								georgeWeasley, ginnyWeasley, inamoto, 
+								harryPotter])
+	var jugadoresOrdenadosPorVelocidadDescendente = [inamoto, katieBell, angelinaJohnson, fredWeasley, 
+													harryPotter,ginnyWeasley, georgeWeasley]
+											
+	assert.that(gryffindor.jugadoresOrdenadosPorVelocidad() == jugadoresOrdenadosPorVelocidadDescendente)
+}
 
 
 // test del tp
@@ -234,3 +250,4 @@ var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague,
 	
 	slytherin.ganaLaQuaffle()
 	assert.that(warrington.tieneLaQuaffle())
+}
