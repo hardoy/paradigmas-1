@@ -84,6 +84,9 @@ class Cazador inherits Jugador {
 			alguienQuePudoBloquar_OElMismo.skillsGanadosPorBloquear()
 			self.modificarSkills((-3))
 		}
+		self.pierdeLaQuaffle()
+		rival.ganaLaQuaffle()
+		}
 	}// como hay un factor suerte puse una var, porque sino se pierde el valor en otra consulta :S... creo
 	
 }
@@ -194,40 +197,28 @@ class Equipo {
 	method jugadores() {
 		return jugadores
 	}
-	method puntos() = return puntos
-	method ganarPuntos(nuevosPuntos) { puntos =+ nuevosPuntos}
-	method promedioHabilidad() {
-		return jugadores.sum({unJugador => unJugador.habilidad()}) / jugadores.size() 
-	}
-	method jugadoresGrosos() {
-		return jugadores.filter({unJugador => unJugador.esGroso()})
-	}
-	method jugadorUtiles() {
-		return jugadores.filter({unJugador => unJugador.esBlancoUtil(self)})
-	}
+	method puntos() = 					return puntos
+	method ganarPuntos(nuevosPuntos) 			{ puntos =+ nuevosPuntos}
+	method promedioHabilidad() = 				return jugadores.sum({unJugador => unJugador.habilidad()}) / jugadores.size() 
+	method jugadoresGrosos() = 				return jugadores.filter({unJugador => unJugador.esGroso()})
+	method jugadorUtiles() = 				return jugadores.filter({unJugador => unJugador.esBlancoUtil(self)})
+	method tieneLaQuaffle() = 				return jugadores.any({unJugador => unJugador.tieneLaQuaffle()})
+		method jugadoresQuePuedenTenerQuaffle() =	return jugadores.filter({unJugador => unJugador.puedeTenerLaQuaffle()})
+	method jugadorMasVeloz(listaDeJugadores) =		return listaDeJugadores.max({unJugador => unJugador.velocidad()})
 	method jugadoresOrdenadosPorVelocidad(){
 		return jugadores.sortedBy({unJugadorRapido, otroJugadorLento  => unJugadorRapido.velocidad() > otroJugadorLento.velocidad()})
 	}
-	method tratarDeBloquearA(cazador){
-		return self.jugadoresOrdenadosPorVelocidad().findOrElse({unJugador => unJugador.verSiPuedeBloquearA(cazador)}, cazador)
-	} 
 	method tieneJugadorEstrellaParaJugarContra(otroEquipo) {
 		return jugadores.any({unJugador => unJugador.esJugadorEstrella(otroEquipo)})
-	}
-	method tieneLaQuaffle(){
-		return jugadores.any({unJugador => unJugador.tieneLaQuaffle()})
-	}
-	method jugadoresQuePuedenTenerQuaffle(){
-		return jugadores.filter({unJugador => unJugador.puedeTenerLaQuaffle()})
-	}
-	method jugadorMasVeloz(listaDeJugadores){
-		return listaDeJugadores.find({unJugador => unJugador.esMasVelozQue(listaDeJugadores)})
 	}
 	method ganaLaQuaffle(){
 		if(!(self.tieneLaQuaffle())){
 			self.jugadorMasVeloz(self.jugadoresQuePuedenTenerQuaffle()).ganaLaQuaffle(self.jugadoresQuePuedenTenerQuaffle())
 		}
 	}
+	method tratarDeBloquearA(cazador){
+		return self.jugadoresOrdenadosPorVelocidad().findOrElse({unJugador => unJugador.verSiPuedeBloquearA(cazador)}, cazador)
+	} 
 }
 
 // escobas
