@@ -37,9 +37,6 @@ class Jugador {
 	method esJugadorEstrella(equipoRival){
 		return equipoRival.jugadores().all({jugadorRival => self.lePasaElTrapoA(jugadorRival)})
 	}
-	method esMasHabilidosoQue(listaDeJugadores){ // no recibe equipo
-		return listaDeJugadores.all({jugador => self.habilidad() >= jugador.habilidad()})
-	}
 	
 	// Metodos para el juego
 	method lePasaElTrapoA(otroJug)=	return self.habilidad() >= 2.0 * otroJug.habilidad()
