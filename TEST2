@@ -214,6 +214,24 @@ test "probar si funciona ganaLaQuaffle() cuando un guardian gana la quaffle"{
 	assert.that(gryffindor.jugadores().contains(inamoto))
 	assert.that(ginnyWeasley.tieneLaQuaffle())
 }
+
+test "probar si el nuevo constructor funciona"{
+	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
+	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
+	
+	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, 
+								georgeWeasley, ginnyWeasley, ronWeasley, 
+								harryPotter])
+								
+	assert.that(angelinaJohnson.equipo() === gryffindor)				
+	
+}
+
 test "probando jugadoresOrdenadosPorVelocidad() de equipo"{
 	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
 	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
@@ -235,6 +253,52 @@ test "probando jugadoresOrdenadosPorVelocidad() de equipo"{
 
 // test del tp
 
+// 2 test del tp en 1
+test "Si la Quaffle está en manos de Ginny, Gryffindor debería tener la Quaffle y no Slytherin. Si Ginny que es cazadora obtiene la Quaffle, debería ser ella quien tiene la Quaffle."{
+	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
+	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
+	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
+	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
+	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
+	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
+	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
+	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
+	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
+	
+	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
+	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	
+	ginnyWeasley.ganaLaQuaffle()
+	
+	assert.that(gryffindor.tieneLaQuaffle())
+	assert.that(ginnyWeasley.tieneLaQuaffle())
+	assert.notThat(slytherin.tieneLaQuaffle())
+}
+
+test "Si Miles que es guardián obtiene la Quaffle, debería ser Graham quien tiene la Quaffle, por ser el más habilidoso de su equipo que puede obtenerla."{
+	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
+	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
+	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
+	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
+	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
+	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
+	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
+
+	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, 
+								gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	
+	milesBletchley.ganaLaQuaffle()
+	
+	
+	assert.that(grahamMontague.tieneLaQuaffle())
+	assert.that(slytherin.tieneLaQuaffle())	
+}
+
 test "Si Slytherin obtiene la Quaffle se la queda Warrington por ser el más veloz que puede obtenerla."{
 	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
 	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
@@ -244,10 +308,27 @@ test "Si Slytherin obtiene la Quaffle se la queda Warrington por ser el más vel
 	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
 	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
 	
-var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, 
+	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, 
 							gregoryGoyle, warrington, milesBletchley, 
 							dracoMalfoy])
 	
 	slytherin.ganaLaQuaffle()
 	assert.that(warrington.tieneLaQuaffle())
 }
+
+test "Si Gryffindor tiene la Quaffle, no debería poder obtenerla nuevamente."{
+	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
+	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
+	
+	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell,
+								georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
+	
+	gryffindor.ganaLaQuaffle()
+	
+	assert.notThat(gryffindor.ganaLaQuaffle())
+} 
