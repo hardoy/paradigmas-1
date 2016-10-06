@@ -102,7 +102,7 @@ class Golpeador inherits Jugador {
 		}
 	}
 	method elegirBlancoUtil(rival){
-			return rival.jugadorUtiles().find({unJugador => unJugador.esMasHabilidosoQue(rival.jugadorUtiles())})
+			return rival.jugadorUtiles().max({unJugador => unJugador.habilidad()})
 	}
 }
 
