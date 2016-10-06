@@ -12,22 +12,26 @@ class Jugador {
 		escoba 	= 	_escoba
 	}
 	
-	// Getters&Setters
-	method skills() = 		return skills
-	method modificarSkills(num)	{ skills =+ num }
-	method peso() =			return peso
-	method fuerza() =		return fuerza
-	method escoba() = 		return escoba
-	method velocidadDeEscoba() = 	return escoba.velocidadEscoba()
-	method saludDeEscoba() = 	return escoba.saludEscoba()
-	method tieneLaQuaffle() =	return tieneLaQuaffle 
-	method equipo() =		return equipo
-	method asignarEquipo(suEquipo)	{ equipo = suEquipo }
+	method skills() = 			return skills
+	method modificarSkills(num)		{ skills =+ num }
+	method peso() =				return peso
+	method fuerza() = 			return fuerza
+	method escoba() = 			return escoba
+	method velocidadDeEscoba() = 		return escoba.velocidadEscoba()
+	method saludDeEscoba() = 		return escoba.saludEscoba()
+	method tieneLaQuaffle() =		return tieneLaQuaffle 
+	method equipo() =			return equipo
+	method asignarEquipo(suEquipo)		{ equipo = suEquipo }
+	method skillsPorBloquear()		{ skills += 3 }
+	method ganaLaQuaffle(){}
+	method pierdeLaQuaffle(){}
+	method hacerJugada(rival){}
 	
 	// Calculos para habilidad
-	method manejoDeEscoba() =	return skills / peso
-	method velocidad() =		return escoba.velocidadEscoba() * self.manejoDeEscoba()
-	method habilidad() =		return self.velocidad() + skills
+	method reflejos() =			return self.velocidad() * skills / 100
+	method manejoDeEscoba() =		return skills / peso
+	method velocidad() =			return escoba.velocidadEscoba() * self.manejoDeEscoba()
+	method habilidad() =			return self.velocidad() + skills
 	
 	// Metodos para facilitar la busqueda de un jugador en un colección
 	method esGroso() {
@@ -38,21 +42,14 @@ class Jugador {
 		return equipoRival.jugadores().all({jugadorRival => self.lePasaElTrapoA(jugadorRival)})
 	}
 	
-	// Metodos para el juego
 	method lePasaElTrapoA(otroJug)=	return self.habilidad() >= 2.0 * otroJug.habilidad()
-	method bludgereado() {
+	method bludgereado(rival) {
 		skills -= 2
 		escoba.recibeGolpe()
-		tieneLaQuaffle = false
 	}
-	method skillsGanadosPorBloquear()	{ skills += 3 }
 	method puedeTenerLaQuaffle() = 		return false
 	method esBlancoUtil(equipoRival)=	return self.esJugadorEstrella(equipoRival) || self.tieneLaQuaffle()
 	method verSiPuedeBloquearA(cazador) = 	return self.lePasaElTrapoA(cazador) || suerte.tieneSuerte()
-	method ganaLaQuaffle(){}
-	method pierdeLaQuaffle(){}
-	method hacerJugada(rival){}
-		
 }
 
 
@@ -66,8 +63,15 @@ class Cazador inherits Jugador {
 	method punteria() =			return punteria
 	override method habilidad() =		return punteria * fuerza + super()
 	override method puedeTenerLaQuaffle()= 	return true
-	override method ganaLaQuaffle()		{tieneLaQuaffle = true }
-	override method pierdeLaQuaffle() 	{tieneLaQuaffle = false}
+	override method ganaLaQuaffle()		{ tieneLaQuaffle = true }
+	override method pierdeLaQuaffle() 	{ tieneLaQuaffle = false}
+	override method bludgereado(rival){
+		super(rival)
+		if(self.tieneLaQuaffle()){
+			self.pierdeLaQuaffle()
+			rival.ganaLaQuaffle()
+		}
+	}
 	override method hacerJugada(rival){
 		var alguienQuePudoBloquar_OElMismo = rival.tratarDeBloquearA(self)
 		if(alguienQuePudoBloquar_OElMismo === self){
@@ -75,12 +79,13 @@ class Cazador inherits Jugador {
 			skills += 5
 		}
 		else{
-			alguienQuePudoBloquar_OElMismo.skillsGanadosPorBloquear()
+			alguienQuePudoBloquar_OElMismo.skillsPorBloquear()
 			skills -= 3
 		}
 		self.pierdeLaQuaffle()
 		rival.ganaLaQuaffle()
 	}// como hay un factor suerte puse una var, porque sino se pierde el valor en otra consulta :S... creo
+	// no puse una condicion para que no permita hacer jugaga sin la quaffle
 	
 }
 
@@ -93,13 +98,13 @@ class Golpeador inherits Jugador {
 	method punteria() =		return punteria
 	override method habilidad() =	return punteria + fuerza + super()
 	override method hacerJugada(rival){
-		if( self.elegirBlancoUtil(rival).reflejos() < self.punteria() ){
+		if( self.elegirBlancoUtil(rival).reflejos() < self.punteria() || suerte.tieneSuerte()){
 			skills += 5
-			self.elegirBlancoUtil(rival).bludgereado(rival)
+			self.elegirBlancoUtil(rival).bludgereado(equipo)
 		}
 	}
 	method elegirBlancoUtil(rival){
-			return rival.jugadorUtiles().max({unJugador => unJugador.habilidad()})
+		return rival.jugadorUtiles(equipo).max({unJugador => unJugador.habilidad()})
 	}
 }
 
@@ -107,9 +112,9 @@ class Golpeador inherits Jugador {
 class Guardian inherits Jugador {
 	constructor(_skills,_peso,_fuerza,_escoba) = 	super(_skills,_peso,_fuerza,_escoba)
 	override method habilidad() =			return self.reflejos() + fuerza + super()
-	method reflejos() =				return 20 + self.velocidad() * skills / 100
+	override method reflejos() =			return 20 + self.velocidad() * skills / 100
 	override method puedeTenerLaQuaffle()= 		return true
-	override method skillsGanadosPorBloquear()	{ skills += 10 }
+	override method skillsPorBloquear()		{ skills += 10 }
 	override method ganaLaQuaffle(){
 		equipo.jugadoresQuePuedenTenerQuaffle().filter({unJugador => unJugador != self}).max({unJugador => unJugador.habilidad()}).ganaLaQuaffle()
 	} // no se usa remove ya que retorna null y no la lista sin el mismo
@@ -125,56 +130,64 @@ class Buscador inherits Jugador {
 		vision = _vision
 	}
 
-	method actividad()= 			return actividad
-	method turnosBuscando() =		return tunosBuscando
-	method cambiarActividad(nuevaActividad)	{ actividad = nuevaActividad }
-	method metrosParaAtraparSnitch() = 	return metrosParaAtrapar
-	method reducirMetrosParaAtraparSnitch()	{ metrosParaAtrapar =- self.velocidad() * 2 }
+	method actividad()= 				return actividad
+	method turnosBuscando() =			return tunosBuscando
+	method cambiarActividad(nuevaActividad)		{ actividad = nuevaActividad }
+	method metrosParaAtraparSnitch() = 		return metrosParaAtrapar
+	method reducirMetrosParaAtraparSnitch()		{ metrosParaAtrapar -= self.velocidad() * 2 }
+	method incrementarTurno()			{ tunosBuscando += 1}
 	method atrapaLaSnitch(){
-		equipo.ganaPuntos(150)
-		self.modificarSkills(30)
+		equipo.ganarPuntos(150)
+		skills += 30
 		}
 	override method habilidad() =			return self.reflejos() * vision + super()
 	override method verSiPuedeBloquearA(cazador) = 	return false
-	method reflejos() =				return self.velocidad() * skills / 100
 	method reiniciarBusqueda(){
 		actividad = busqueda
-		tunosBuscando = 1
+		tunosBuscando = 0
 		metrosParaAtrapar = 5000
 	}
-	override method bludgereado(){
-		super()
+	override method bludgereado(rival){
+		super(rival)
 		if(self.esGroso()){
-			aturdido.guardarActividadAnterior(actividad)
-			actividad = aturdido
+			if(actividad != aturdido){
+				aturdido.guardarActividadAnterior(actividad)
+				actividad = aturdido
+				}
 		}
 		else{self.reiniciarBusqueda()}
 	}
-	override method hacerJugada(rival) { actividad.realizarla(equipo, self) }
+	override method hacerJugada(rival) { actividad.realizarla(self) }
 	override method esBlancoUtil(equipoRival){
 		return super(equipoRival) || (actividad === persecucion && metrosParaAtrapar < 1000)
 	}
+	//Metodos para hacer test
+	method 	cambiarDistancia(nuevaDistancia){ metrosParaAtrapar = nuevaDistancia }
+
 }
+
 object busqueda{
 	method realizarla(unJugador){
+		unJugador.incrementarTurno()
 		unJugador.turnosBuscando().times{if(suerte.tieneSuerte()){ unJugador.cambiarActividad(persecucion) }}
 	}
 }
+
 object persecucion{
 	method realizarla(unJugador){
 		unJugador.reducirMetrosParaAtraparSnitch()
-		if(unJugador.metrosParaAtrapar() <= 0) { 
+		if(unJugador.metrosParaAtraparSnitch() <= 0) { 
 			unJugador.atrapaLaSnitch()
 		}
 	}
 }
+
 object aturdido{
 	var estadoAnteriorASerGolpeado
 	method realizarla(unJugador)			{ unJugador.cambiarActividad(estadoAnteriorASerGolpeado) }
 	method guardarActividadAnterior(actividad)	{ estadoAnteriorASerGolpeado = actividad }
 }
 
-// Equipo
 class Equipo {
 	var jugadores
 	var puntos = 0
@@ -182,15 +195,15 @@ class Equipo {
 		jugadores = _jugadores
 		jugadores.map({ unJugador => unJugador.asignarEquipo(self) })
 	}
-	method jugadores() =				return jugadores
+	method jugadores() = 				return jugadores
 	method puntos() = 				return puntos
-	method ganarPuntos(nuevosPuntos) 		{ puntos =+ nuevosPuntos}
+	method ganarPuntos(nuevosPuntos) 		{ puntos += nuevosPuntos}
 	method promedioHabilidad() = 			return jugadores.sum({unJugador => unJugador.habilidad()}) / jugadores.size() 
 	method jugadoresGrosos() = 			return jugadores.filter({unJugador => unJugador.esGroso()})
-	method jugadorUtiles() = 			return jugadores.filter({unJugador => unJugador.esBlancoUtil(self)})
+	method jugadorUtiles(rival) = 			return jugadores.filter({unJugador => unJugador.esBlancoUtil(rival)})
 	method tieneLaQuaffle() = 			return jugadores.any({unJugador => unJugador.tieneLaQuaffle()})
 	method jugadoresQuePuedenTenerQuaffle() = 	return jugadores.filter({unJugador => unJugador.puedeTenerLaQuaffle()})
-	method jugadorMasVeloz(listaDeJugadores) = 	return listaDeJugadores.max({unJugador => unJugador.velocidad()})
+	method jugadorMasVeloz(listaDeJugadores) =	return listaDeJugadores.max({unJugador => unJugador.velocidad()})
 	method jugadoresOrdenadosPorVelocidad(){
 		return jugadores.sortedBy({unJugadorRapido, otroJugadorLento  => unJugadorRapido.velocidad() > otroJugadorLento.velocidad()})
 	}
@@ -204,7 +217,7 @@ class Equipo {
 		}
 		else{return false}
 	}
-	method pierdeLaQuaffle(rival){
+	method pierdeLaQuaffleAnte(rival){
 		if(self.tieneLaQuaffle()){
 			jugadores.find({unJugador => unJugador.tieneLaQuaffle()}).hacerJugada(rival)
 			return true
@@ -212,7 +225,7 @@ class Equipo {
 		else{return false}
 	}
 	method tratarDeBloquearA(cazador){
-		return self.jugadoresOrdenadosPorVelocidad().findOrElse({unJugador => unJugador.verSiPuedeBloquearA(cazador)}, cazador)
+		return self.jugadoresOrdenadosPorVelocidad().findOrElse({unJugador => unJugador.verSiPuedeBloquearA(cazador)}, {cazador})
 	} 
 }
 
