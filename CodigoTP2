@@ -207,6 +207,13 @@ class Equipo {
 		}
 		else{return false}
 	}
+	method pierdeLaQuaffle(rival){
+		if(self.tieneLaQuaffle()){
+			jugadores.find({unJugador => unJugador.tieneLaQuaffle()}).hacerJugada(rival)
+			return true
+		}
+		else{return false}
+	}
 	method tratarDeBloquearA(cazador){
 		return self.jugadoresOrdenadosPorVelocidad().findOrElse({unJugador => unJugador.verSiPuedeBloquearA(cazador)}, cazador)
 	} 
