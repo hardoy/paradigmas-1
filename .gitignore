@@ -1,6 +1,5 @@
 # Cosas del IDE de Wollok
 .classpath
-.project
 .settings/
 
 # Archivos compilados
