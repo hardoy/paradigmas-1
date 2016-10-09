@@ -1,0 +1,135 @@
+import Jugador.*
+import Buscador.*
+import Guardian.*
+import Cazador.*
+import Golpeador.*
+import Escobas.*
+import Equipo.*
+import Suerte.*
+import Pelotas.*
+import Actividades.*
+
+test "Harry Potter deberia tener 0,5 de manejo de escoba."{
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
+
+	assert.equals(harryPotter.manejoDeEscoba(), 0.5)
+}
+
+test "La escoba de Ron Weasley deberia tener una velocidad de 32 con lo cual su velocidad seria 16.
+Draco Malfoy deberia tener una velocidad de 35,1."{
+ 	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+ 	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
+ 
+ 	assert.equals(ronWeasley.velocidadDeEscoba(), 32.0)
+ 	assert.equals(ronWeasley.velocidad(), 16.0)
+ 	assert.equals(dracoMalfoy.velocidad(), 35.1)
+ }
+
+test "Harry Potter deberia tener una velocidad 50."{
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
+
+ 	assert.equals(harryPotter.velocidad(), 50.0)
+}
+
+test "Harry Potter, por ser buscador, deberia tener una habilidad de 110."{
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
+
+ 	assert.equals(harryPotter.habilidad(), 110.0)
+}
+
+test "Ginny Weasley, por ser cazadora, deberia tener una habilidad de 282."{
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+
+	assert.equals(ginnyWeasley.habilidad(), 282.0)
+}
+
+test "Fred Weasley, por ser golpeador, deberia tener una habilidad de 240."{
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	
+	assert.equals(fredWeasley.habilidad(), 240.0)
+}
+
+test "Ron Weasley, por ser guardian, deberia tener una habilidad de 120,8."{
+	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+	
+	assert.equals(ronWeasley.habilidad(), 120.8)
+}
+
+test "Fred Weasley deberia pasarle el trapo a Miles Bletchley pero no a Warrington."{
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
+	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
+	
+	assert.that(fredWeasley.lePasaElTrapoA(milesBletchley))
+	assert.notThat(fredWeasley.lePasaElTrapoA(warrington))
+}
+
+test "De Gryffindor solo Fred, Angelina y Katie son grosos, de Slytherin solo Warrington y Montague."{
+	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
+	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
+	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
+	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
+	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
+	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
+	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
+	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
+	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
+	
+	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
+	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	
+	mercadoDeEscobas.velocidadMinimaParaSerGroso(50)
+	
+	assert.that(gryffindor.jugadoresGrosos().contains(fredWeasley))
+	assert.that(gryffindor.jugadoresGrosos().contains(angelinaJohnson))
+	assert.that(gryffindor.jugadoresGrosos().contains(katieBell))
+	assert.that(gryffindor.jugadoresGrosos().size() == 3)
+	assert.that(slytherin.jugadoresGrosos().contains(warrington))
+	assert.that(slytherin.jugadoresGrosos().contains(grahamMontague))
+	assert.that(slytherin.jugadoresGrosos().size() == 2)
+}
+
+test "Slytherin tiene jugador estrella contra Gryffindor, la inversa no es cierta."{
+	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
+	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
+	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
+	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
+	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
+	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
+	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
+	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
+	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
+	
+	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
+	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	
+	assert.notThat(gryffindor.tieneJugadorEstrellaParaJugarContra(slytherin))
+	assert.that(slytherin.tieneJugadorEstrellaParaJugarContra(gryffindor))
+}
+
+test "Si Crabbe es golpeado por una bludger sus skills pasan a ser 78."{
+	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
+	var rival = new Equipo([])
+	vincentCrabbe.bludgereado(rival)
+	
+	assert.equals(vincentCrabbe.skills(),78.00)
+}
+
+test "Si Ron es golpeado por una bludger sus skills pasan a ser 28 y su Nimbus queda con 40% de salud."{
+	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+	var rival = new Equipo([])
+	ronWeasley.bludgereado(rival)
+	
+	assert.equals(ronWeasley.skills(),28.00)
+	assert.equals(ronWeasley.saludDeEscoba(),40.00)
+}
