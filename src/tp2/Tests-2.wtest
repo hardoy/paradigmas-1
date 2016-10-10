@@ -11,32 +11,6 @@ import Actividades.*
 
 //test que no son para el tp
 
-test "probar metodo jugadorMasVeloz(listadeJugadores) del equipo"{
-	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
-	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
-	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
-	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
-	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
-	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
-	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
-	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
-	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
-	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
-	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
-	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
-	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
-	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
-
-	var jugadores = [angelinaJohnson, fredWeasley, katieBell, georgeWeasley,
-					ginnyWeasley,ronWeasley,harryPotter,adrianPucey,vincentCrabbe,
-					grahamMontague,gregoryGoyle,warrington,milesBletchley,
-					dracoMalfoy]
-	var hogwarts = new Equipo(jugadores)
-					
-	assert.that(hogwarts.jugadorMasVeloz(jugadores) === gregoryGoyle)
-}
-
-
 test "probar metodo jugadoresQuePuedenTenerQuaffle() del equipo"{
 	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
 	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
