@@ -25,27 +25,30 @@ class Buscador inherits Jugador {
 		skills += 30
 		}
 	override method habilidad() =			return self.reflejos() * vision + super()
-	override method verSiPuedeBloquearA(cazador) = 	return false
-	method reiniciarBusqueda(){
+	override method puedeBloquearA(cazador) = 	return false
+	method reiniciarBusqueda() {
 		actividad = busqueda
 		tunosBuscando = 0
 		metrosParaAtrapar = 5000
 	}
-	override method bludgereado(rival){
-		super(rival)
-		if(self.esGroso()){
-			if(actividad != aturdido){
-				estadoAnteriorASerGolpeado = actividad
+	override method bludgereado() {
+		super() 
+		if (self.esGroso()) {
+			if (actividad != aturdido) {
+				estadoAnteriorASerGolpeado = actividad 
 				actividad = aturdido
-				}
+			}
 		}
-		else{self.reiniciarBusqueda()}
+		else { self.reiniciarBusqueda() }
 	}
-	override method hacerJugada(rival) { actividad.realizarla(self) }
-	override method esBlancoUtil(equipoRival){
-		return super(equipoRival) || (actividad === persecucion && metrosParaAtrapar < 1000)
+	override method hacerJugada() { actividad.realizarla(self) }
+	override method esBlancoUtil() {
+		return super() || (actividad === persecucion && metrosParaAtrapar < 1000)
 	}
 	//Metodos para hacer test
 	method 	cambiarDistancia(nuevaDistancia){ metrosParaAtrapar = nuevaDistancia }
-
+	
+	override method puedeTenerLaQuaffle() {
+		return false
+	}
 }

@@ -1,6 +1,10 @@
 
 object quaffle {
 	var duenio
+	
 	method laTiene() = return duenio
-	method laGana(unJugador) { duenio = unJugador }
+
+	method laTiene(unJugador) { 
+		duenio = unJugador
+	}
 }
