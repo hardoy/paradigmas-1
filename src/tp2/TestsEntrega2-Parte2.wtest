@@ -73,6 +73,11 @@ mientras que los de Montague quedan en 33."{
 	dracoMalfoy.cambiarActividad(persecucion)
 	dracoMalfoy.cambiarDistancia(100)
 	
+	assert.equals(3, fredWeasley.equipoRival().blancosUtiles().size()) // aca falla porque size() da 2 en vez de 3
+	assert.that(fredWeasley.equipoRival().blancosUtiles().contains(dracoMalfoy))
+	assert.that(fredWeasley.equipoRival().blancosUtiles().contains(grahamMontague))
+	assert.that(fredWeasley.equipoRival().blancosUtiles().contains(milesBletchley))
+	
 	assert.equals(grahamMontague, fredWeasley.elegirBlancoUtil())
 	fredWeasley.hacerJugada()
 	
