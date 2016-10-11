@@ -1,4 +1,3 @@
-import Jugador.*
 import Buscador.*
 import Guardian.*
 import Cazador.*
@@ -6,110 +5,9 @@ import Golpeador.*
 import Escobas.*
 import Equipo.*
 import Suerte.*
-import Pelotas.*
 import Actividades.*
+import Excepciones.*
 
-//test que no son para el tp
-
-test "probar metodo jugadoresQuePuedenTenerQuaffle() del equipo"{
-	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
-	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
-	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
-	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
-	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
-	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
-	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
-
-
-	var jugadores = [angelinaJohnson, fredWeasley, katieBell, georgeWeasley,
-					ginnyWeasley,ronWeasley,harryPotter]
-	var hogwarts = new Equipo(jugadores)
-					
-	assert.that(hogwarts.jugadoresQuePuedenTenerQuaffle().contains(angelinaJohnson))
-	assert.that(hogwarts.jugadoresQuePuedenTenerQuaffle().contains(katieBell))
-	assert.that(hogwarts.jugadoresQuePuedenTenerQuaffle().contains(ginnyWeasley))
-	assert.that(hogwarts.jugadoresQuePuedenTenerQuaffle().contains(ronWeasley))
-	assert.equals(hogwarts.jugadoresQuePuedenTenerQuaffle().size(), 4)
-}
-
-test "probar si funciona ganaLaQuaffle() cuando un guardian gana la quaffle"{
-	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
-	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
-	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
-	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
-	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
-	var inamoto = new Guardian(150.0, 65.0, 99.0, saetaDeFuego)
-	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)	
-	
-	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, 
-								georgeWeasley, ginnyWeasley, inamoto, 
-								harryPotter])
-	
-	gryffindor.ganaLaQuaffle()
-	assert.that(gryffindor.jugadores().contains(inamoto))
-	assert.that(ginnyWeasley.tieneLaQuaffle())
-}
-
-test "probar si el nuevo constructor funciona"{
-	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
-	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
-	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
-	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
-	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
-	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
-	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)
-	
-	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, 
-								georgeWeasley, ginnyWeasley, ronWeasley, 
-								harryPotter])
-								
-	assert.that(angelinaJohnson.equipo() === gryffindor)				
-	
-}
-
-test "probando jugadoresOrdenadosPorVelocidad() de equipo"{
-	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
-	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
-	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
-	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
-	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
-	var inamoto = new Guardian(150.0, 65.0, 99.0, saetaDeFuego)
-	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2.0)	
-	
-	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, 
-								georgeWeasley, ginnyWeasley, inamoto, 
-								harryPotter])
-	var jugadoresOrdenadosPorVelocidadDescendente = [inamoto, katieBell, angelinaJohnson, fredWeasley, 
-													harryPotter,ginnyWeasley, georgeWeasley]
-											
-	assert.that(gryffindor.jugadoresOrdenadosPorVelocidad() == jugadoresOrdenadosPorVelocidadDescendente)
-}
-
-test "probar ganaLaQuaffle de equipo"{
-	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
-	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
-	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
-	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
-	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
-	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
-	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
-	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
-	
-	var gryffindor = new Equipo([ginnyWeasley])
-	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, 
-								warrington, milesBletchley, dracoMalfoy])
-	
-	ginnyWeasley.ganaLaQuaffle()
-	slytherin.ganaLaQuaffle()
-	
-	assert.that(slytherin.tieneLaQuaffle())
-
-}
-
-
-// test del tp
-
-// 2 test del tp en 1
 test "Si la Quaffle está en manos de Ginny, Gryffindor debería tener la Quaffle y no Slytherin. Si Ginny que es cazadora obtiene la Quaffle, debería ser ella quien tiene la Quaffle."{
 	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
 	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
@@ -150,7 +48,6 @@ test "Si Miles que es guardián obtiene la Quaffle, debería ser Graham quien ti
 	
 	milesBletchley.ganaLaQuaffle()
 	
-	
 	assert.that(grahamMontague.tieneLaQuaffle())
 	assert.that(slytherin.tieneLaQuaffle())	
 }
@@ -187,7 +84,7 @@ test "Si Gryffindor tiene la Quaffle, no debería poder obtenerla nuevamente."{
 	
 	gryffindor.ganaLaQuaffle()
 	
-//	TODO: assert.notThat(gryffindor.ganaLaQuaffle())
+	assert.throwsExceptionLike(new NoPuedeGanarLaQuaffle(), { gryffindor.ganaLaQuaffle() })
 } 
 
 test "Si la Quaffle está en manos de Ginny y la pierde contra Slytherin, Warrington debería tener la Quaffle y no Ginny."{
@@ -208,43 +105,17 @@ test "Si la Quaffle está en manos de Ginny y la pierde contra Slytherin, Warrin
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	ginnyWeasley.ganaLaQuaffle()
-	gryffindor.pierdeLaQuaffleAnte(slytherin)
+	gryffindor.pierdeLaQuaffle()
 	
 	assert.notThat(ginnyWeasley.tieneLaQuaffle())
 	assert.that(warrington.tieneLaQuaffle())
 }
 
-/* no pude hacerlo
 test "Si la Quaffle está en manos de Ginny, Katie no debería poder perder la Quaffle contra Slytherin."{
-
-} */
-
-test "Si la Quaffle está en manos de Ginny y es golpeada por una Bludger de Slytherin, Slytherin debería tener la Quaffle."{
-	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
-	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
-	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
-	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
-	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
-	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
-	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
-	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
-	
-	suerte.tipoDeSuerte(buenaSuerte)
-	var gryffindor = new Equipo([ginnyWeasley])
-	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, 
-								warrington, milesBletchley, dracoMalfoy])
-	
-	
-	ginnyWeasley.ganaLaQuaffle()
-	gregoryGoyle.hacerJugada(gryffindor)
-	
-	assert.that(slytherin.tieneLaQuaffle())
-	assert.notThat(ginnyWeasley.tieneLaQuaffle())	
-}
-
-test "Si Harry hace una jugada contra Slytherin con buena suerte, encuentra la Snitch."{
 	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
 	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
 	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
@@ -262,11 +133,66 @@ test "Si Harry hace una jugada contra Slytherin con buena suerte, encuentra la S
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
+	
+	ginnyWeasley.ganaLaQuaffle()
+	assert.that(ginnyWeasley.tieneLaQuaffle())
+	
+	assert.throwsExceptionLike(new NoPuedePerderLaQuaffle(), { katieBell.pierdeLaQuaffle() })
+	
+}
+
+test "Si la Quaffle está en manos de Ginny y es golpeada por una Bludger de Slytherin, Slytherin debería tener la Quaffle."{
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
+	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
+	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
+	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
+	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
+	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
+	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
 	
 	suerte.tipoDeSuerte(buenaSuerte)
-	harryPotter.hacerJugada(slytherin)
+	var gryffindor = new Equipo([ginnyWeasley])
+	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, 
+								warrington, milesBletchley, dracoMalfoy])
 	
-	assert.that(harryPotter.actividad() === persecucion)
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
+	
+	ginnyWeasley.ganaLaQuaffle()
+	gregoryGoyle.hacerJugada()
+	
+	assert.that(slytherin.tieneLaQuaffle())
+	assert.notThat(ginnyWeasley.tieneLaQuaffle())	
+}
+
+test "Si Harry hace una jugada contra Slytherin con buena suerte, encuentra la Snitch."{
+	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
+	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
+	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
+	var georgeWeasley = new Golpeador(70.0, 80.0, 70.0, new Nimbus(2001,50), 17.0)
+	var ginnyWeasley = new Cazador(50.0, 50.0, 40.0, new Nimbus(2001,50), 5.0)
+	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
+	var harryPotter = new Buscador(30.0, 60.0, 80.0, saetaDeFuego, 2)
+	var adrianPucey = new Cazador(30.0, 80.0, 70.0, saetaDeFuego, 4.0)
+	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
+	var grahamMontague = new Cazador(35.0, 65.0, 85.0, saetaDeFuego, 6.0)
+	var gregoryGoyle = new Golpeador(70.0, 65.0, 90.0, saetaDeFuego, 15.0)
+	var warrington = new Cazador(32.0, 50.0, 70.0, saetaDeFuego, 5.0)
+	var milesBletchley = new Guardian(20.0, 80.0, 50.0, saetaDeFuego)
+	var dracoMalfoy = new Buscador(27.0, 50.0, 30.0, new Nimbus(2001,100), 7.0)
+	
+	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
+	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
+	
+	suerte.tipoDeSuerte(buenaSuerte)
+	harryPotter.hacerJugada()
+	
+	assert.that(harryPotter.encontroSnitch())
 }
 
 test "Si Harry está persiguiendo la Snitch estando a 4000 metros de distancia de atraparla y hace una jugada contra Slytherin, queda a 3900 metros de distancia."{
@@ -287,13 +213,15 @@ test "Si Harry está persiguiendo la Snitch estando a 4000 metros de distancia d
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	harryPotter.cambiarActividad(persecucion)
 	harryPotter.cambiarDistancia(4000)
 	
-	harryPotter.hacerJugada(slytherin)
+	harryPotter.hacerJugada()
 	
-	assert.equals(harryPotter.metrosParaAtraparSnitch(), 3900)
+	assert.equals(3900, harryPotter.metrosParaAtraparSnitch())
 }
 
 
@@ -315,12 +243,14 @@ test "Si Gryffindor tiene 30 puntos y Harry está persiguiendo la Snitch estando
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	harryPotter.cambiarActividad(persecucion)
 	harryPotter.cambiarDistancia(75)
 	gryffindor.ganarPuntos(30)
 	
-	harryPotter.hacerJugada(slytherin)
+	harryPotter.hacerJugada()
 	
 	assert.equals(gryffindor.puntos(), 180)
 	assert.equals(harryPotter.skills(), 60)
@@ -348,12 +278,14 @@ test "Si Harry estaba buscando la Snitch desde hace 3 turnos y lo golpea una Blu
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	harryPotter.incrementarTurno()
 	harryPotter.incrementarTurno()
 	harryPotter.cambiarActividad(persecucion)
 	harryPotter.cambiarDistancia(75)
-	harryPotter.bludgereado(slytherin)
+	harryPotter.bludgereado()
 	
 	assert.equals(harryPotter.turnosBuscando(), 0)
 	assert.equals(harryPotter.metrosParaAtraparSnitch(), 5000)

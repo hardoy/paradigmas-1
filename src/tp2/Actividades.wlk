@@ -3,8 +3,13 @@ import Suerte.*
 object busqueda {
 	method realizarla(unJugador) {
 		unJugador.incrementarTurno()
-		unJugador.turnosBuscando().times{ if (suerte.tieneSuerte()) {
-			unJugador.cambiarActividad(persecucion) } }
+		var checkearSuerte = unJugador.turnosBuscando() + unJugador.vision()
+		checkearSuerte.times { 
+			if (suerte.tieneSuerte()) {
+				unJugador.encontroSnitch(true)
+				unJugador.cambiarActividad(persecucion)
+			} 
+		}
 	}
 }
 
@@ -15,8 +20,4 @@ object persecucion {
 			unJugador.atrapaLaSnitch()
 		}
 	}
-}
-
-object aturdido {
-	method realizarla(unJugador) { unJugador.recuperarse() }
 }

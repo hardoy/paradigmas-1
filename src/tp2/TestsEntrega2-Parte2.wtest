@@ -1,4 +1,3 @@
-import Jugador.*
 import Buscador.*
 import Guardian.*
 import Cazador.*
@@ -6,7 +5,6 @@ import Golpeador.*
 import Escobas.*
 import Equipo.*
 import Suerte.*
-import Pelotas.*
 import Actividades.*
 
 test "Si Harry (luego de ganar 100 puntos de skills) estaba persiguiendo la Snitch estando a 75 metros de 
@@ -30,18 +28,20 @@ segunda jugada debería tener 158 de skills por atrapar la Snitch."{
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	mercadoDeEscobas.velocidadMinimaParaSerGroso(50)
 	harryPotter.cambiarActividad(persecucion)
 	harryPotter.cambiarDistancia(75)
-	harryPotter.bludgereado(slytherin)
-	assert.that(harryPotter.actividad() === aturdido)
+	harryPotter.bludgereado()
+	assert.that(harryPotter.aturdido())
 	
-	harryPotter.bludgereado(slytherin)
-	harryPotter.hacerJugada(slytherin)
+	harryPotter.hacerJugada()
+	assert.equals(75, harryPotter.metrosParaAtraparSnitch())
 	
-	assert.equals(harryPotter.metrosParaAtraparSnitch(), 75)
-	assert.that(harryPotter.actividad() === persecucion)
+	harryPotter.hacerJugada()
+	assert.equals(158, harryPotter.skills())
 }
 
 test "Si Fred hace una jugada contra Slytherin, con Ginny teniendo la Quaffle y Malfoy a 100 metros de 
@@ -66,11 +66,15 @@ mientras que los de Montague quedan en 33."{
 	suerte.tipoDeSuerte(buenaSuerte)
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	ginnyWeasley.ganaLaQuaffle()
+	dracoMalfoy.cambiarActividad(persecucion)
 	dracoMalfoy.cambiarDistancia(100)
 	
-	fredWeasley.hacerJugada(slytherin)
+	assert.equals(grahamMontague, fredWeasley.elegirBlancoUtil())
+	fredWeasley.hacerJugada()
 	
 	assert.equals(fredWeasley.skills(), 85.0)
 	assert.equals(grahamMontague.skills(), 33.0)
@@ -97,10 +101,12 @@ sus skills quedan en 70 y Ginny sigue teniendo la Quaffle."{
 	suerte.tipoDeSuerte(malaSuerte)
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	ginnyWeasley.ganaLaQuaffle()
 	
-	gregoryGoyle.hacerJugada(gryffindor)
+	gregoryGoyle.hacerJugada()
 	
 	assert.that(ginnyWeasley.tieneLaQuaffle())
 	assert.equals(gregoryGoyle.skills(),70)
@@ -128,10 +134,12 @@ golpear a Ginny, sus skills quedan en 75 y Ginny ya no tiene la Quaffle."{
 	suerte.tipoDeSuerte(malaSuerte)
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	ginnyWeasley.ganaLaQuaffle()
 	
-	gregoryGoyle.hacerJugada(gryffindor)
+	gregoryGoyle.hacerJugada()
 	
 	assert.notThat(ginnyWeasley.tieneLaQuaffle())
 	assert.equals(gregoryGoyle.skills(),75)
@@ -157,17 +165,19 @@ con lo cual Katie queda con 42 puntos de skills y Montague con 38."{
 	suerte.tipoDeSuerte(malaSuerte)
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	katieBell.ganaLaQuaffle()
-	katieBell.hacerJugada(slytherin)
+	katieBell.hacerJugada()
 	
 	assert.equals(katieBell.skills(),42)
 	assert.equals(grahamMontague.skills(),38)
 }
 
 test "Un bloqueo de Gryffindor a Montague con buena suerte es exitoso, 
-con lo cual los skills de Montague quedan en 37 y los de Katie (la más veloz que puede bloquear) 
-quedan en 48."{ // dice 37 pero debe ser un error de tipeo
+con lo cual los skills de Montague quedan en 32 y los de Katie (la más veloz que puede bloquear) 
+quedan en 48."{
 	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
 	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
 	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
@@ -186,9 +196,11 @@ quedan en 48."{ // dice 37 pero debe ser un error de tipeo
 	suerte.tipoDeSuerte(buenaSuerte)
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	grahamMontague.ganaLaQuaffle()
-	grahamMontague.hacerJugada(gryffindor)
+	grahamMontague.hacerJugada()
 	
 	assert.equals(katieBell.skills(),48)
 	assert.equals(grahamMontague.skills(),32)
@@ -196,7 +208,7 @@ quedan en 48."{ // dice 37 pero debe ser un error de tipeo
 
 test "Si Ron cambia su escoba por una Nimbus 2016 en perfecto estado, 
 un bloqueo de Gryffindor a Montague con mala suerte será exitoso. 
-Los skills de Montague quedan en 37 y los de Ron, que es guardián, quedan en 40."{
+Los skills de Montague quedan en 32 y los de Ron, que es guardián, quedan en 40."{
 	var angelinaJohnson = new Cazador(40.0, 55.0, 40.0, saetaDeFuego, 3.0)
 	var fredWeasley = new Golpeador(80.0, 80.0, 90.0, new Nimbus(2001,80), 18.0)
 	var katieBell = new Cazador(45.0, 60.0, 30.0,  saetaDeFuego, 4.0)
@@ -215,12 +227,15 @@ Los skills de Montague quedan en 37 y los de Ron, que es guardián, quedan en 40
 	suerte.tipoDeSuerte(malaSuerte)
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
-	
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
+	assert.equals(ronWeasley.habilidad(), grahamMontague.habilidad())
+	assert.that(ronWeasley.lePasaElTrapoA(grahamMontague))
 	grahamMontague.ganaLaQuaffle()
-	grahamMontague.hacerJugada(gryffindor)
+	grahamMontague.hacerJugada()
 	
-	assert.equals(ronWeasley.skills(), 40)
-	assert.equals(grahamMontague.skills(),32)
+	assert.equals(40, ronWeasley.skills())
+	assert.equals(32, grahamMontague.skills())
 } // este test esta mal, pero no sé si es porque el enunciado está mal
 
 test "Si Montague tiene la Quaffle, hace una jugada contra Gryffindor y no lo bloquean 
@@ -244,9 +259,11 @@ Gryffindor se queda con la Quaffle."{
 	suerte.tipoDeSuerte(malaSuerte)
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	grahamMontague.ganaLaQuaffle()
-	grahamMontague.hacerJugada(gryffindor)
+	grahamMontague.hacerJugada()
 	
 	assert.equals(grahamMontague.skills(),40)
 	assert.equals(slytherin.puntos(),10)
@@ -272,9 +289,11 @@ test "Si Katie hace una jugada contra Slytherin, como es bloqueada Gryffindor no
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
 	katieBell.ganaLaQuaffle()
-	katieBell.hacerJugada(slytherin)
+	katieBell.hacerJugada()
 
 	
 	assert.equals(gryffindor.puntos(),0)
@@ -300,8 +319,10 @@ test "Si Ron hace una jugada contra Slytherin, sus skills no varían y los punto
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
- 	
- 	ronWeasley.hacerJugada(slytherin)
+ 	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
+	
+ 	ronWeasley.hacerJugada()
  	
  	assert.equals(slytherin.puntos(),0)
  	assert.equals(ronWeasley.skills(),30.0)

@@ -2,9 +2,11 @@
 object quaffle {
 	var duenio
 	
-	method laTiene() = return duenio
+	method duenio() = return duenio
 
-	method laTiene(unJugador) { 
+	method duenio(unJugador) { 
 		duenio = unJugador
 	}
+	
+	method tieneDuenio() = self.duenio() != null
 }

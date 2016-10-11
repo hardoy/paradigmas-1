@@ -112,23 +112,27 @@ test "Slytherin tiene jugador estrella contra Gryffindor, la inversa no es ciert
 	
 	var gryffindor = new Equipo([angelinaJohnson, fredWeasley, katieBell, georgeWeasley, ginnyWeasley, ronWeasley, harryPotter])
 	var slytherin = new Equipo([adrianPucey, vincentCrabbe, grahamMontague, gregoryGoyle, warrington, milesBletchley, dracoMalfoy])
+	gryffindor.rival(slytherin)
+	slytherin.rival(gryffindor)
 	
-	assert.notThat(gryffindor.tieneJugadorEstrellaParaJugarContra(slytherin))
-	assert.that(slytherin.tieneJugadorEstrellaParaJugarContra(gryffindor))
+	assert.notThat(gryffindor.tieneJugadorEstrella())
+	assert.that(slytherin.tieneJugadorEstrella())
 }
 
 test "Si Crabbe es golpeado por una bludger sus skills pasan a ser 78."{
 	var vincentCrabbe = new Golpeador(80.0, 75.0, 80.0, saetaDeFuego, 8.0)
-	var rival = new Equipo([])
-	vincentCrabbe.bludgereado(rival)
+	var equipo = new Equipo([vincentCrabbe])
+	equipo.rival(new Equipo([]))
+	vincentCrabbe.bludgereado()
 	
-	assert.equals(vincentCrabbe.skills(),78.00)
+	assert.equals(78.00, vincentCrabbe.skills())
 }
 
 test "Si Ron es golpeado por una bludger sus skills pasan a ser 28 y su Nimbus queda con 40% de salud."{
 	var ronWeasley = new Guardian(30.0, 60.0, 50.0, new Nimbus(2001,50))
-	var rival = new Equipo([])
-	ronWeasley.bludgereado(rival)
+	var equipo = new Equipo([ronWeasley])
+	equipo.rival(new Equipo([]))
+	ronWeasley.bludgereado()
 	
 	assert.equals(ronWeasley.skills(),28.00)
 	assert.equals(ronWeasley.saludDeEscoba(),40.00)

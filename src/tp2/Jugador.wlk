@@ -8,7 +8,6 @@ class Jugador {
 	var fuerza
 	var escoba
 	var equipo
-	var suerte
 	
 	constructor(_skills,_peso,_fuerza,_escoba) {
 		skills 	= 	_skills
@@ -17,33 +16,39 @@ class Jugador {
 		escoba 	= 	_escoba
 	}
 	
-	method skills() =			return skills
-	method ganarSkillsPorBloquear() { self.aumentarSkills(3) }
-	method aumentarSkills(num)		{ skills =+ num }
-	method disminuirSkills(num)		{ skills =- num }
-	method peso() =				return peso
-	method fuerza() = 			return fuerza
-	method escoba() = 			return escoba
-	method velocidad() =			return escoba.velocidadEscoba() * self.manejoDeEscoba()
-	method habilidad() =			return self.velocidad() + skills
-	method reflejos() =			return self.velocidad() * skills / 100
-	method manejoDeEscoba() =		return skills / peso
-	method suerte(_suerte)	{ suerte = _suerte }
+	method skills() = skills
+	method skillsQueGanaPorBloquear() =	3
+	method aumentarSkills(num)		{ skills += num }
+	method disminuirSkills(num)		{ skills -= num }
+	method ganarSkillsPorBloquear() {
+		self.aumentarSkills(self.skillsQueGanaPorBloquear())
+	}
+	
+	method peso() = peso
+	method fuerza() = fuerza
+	method escoba() = escoba
+	method velocidad() = escoba.velocidadEscoba() * self.manejoDeEscoba()
+	method habilidad() = self.velocidad() + skills
+	method reflejos() = self.velocidad() * skills / 100
+	method manejoDeEscoba() = skills / peso
 
-	method equipo() =			return equipo
-	method equipoRival() =	return equipo.rival()
+	method equipo() = equipo
+	method equipoRival() = equipo.rival()
 	method asignarEquipo(suEquipo)		{ equipo = suEquipo }
 	
-	method esBlancoUtil() =	return self.esJugadorEstrella() || self.tieneLaQuaffle()
-	method velocidadDeEscoba() = 		return escoba.velocidadEscoba()
-	method saludDeEscoba() = 		return escoba.saludEscoba()
-	method puedeBloquearA(jugador) = 	return self.lePasaElTrapoA(jugador) || suerte.tieneSuerte()
-	method lePasaElTrapoA(otroJug) =		return self.habilidad() >= 2.0 * otroJug.habilidad()
+	method esBlancoUtil() =	self.esJugadorEstrella()
+	method velocidadDeEscoba() = escoba.velocidadEscoba()
+	method saludDeEscoba() = escoba.saludEscoba()
+	method puedeBloquearA(jugador) = self.lePasaElTrapoA(jugador) || suerte.tieneSuerte()
+	method lePasaElTrapoA(otroJug) = self.habilidad() >= 2.0 * otroJug.habilidad()
 
 	method hacerJugada()
 	
 	method puedeTenerLaQuaffle()
-	method tieneLaQuaffle() =		return quaffle.laTiene() === self
+	method tieneLaQuaffle() = quaffle.tieneDuenio() && quaffle.duenio() === self
+	method ganaLaQuaffle() {}
+	method pierdeLaQuaffle() {}
+	
 	
 	method esGroso() {
 		return self.habilidad() > equipo.promedioHabilidad() 
@@ -55,7 +60,7 @@ class Jugador {
 	}
 
 	method bludgereado() {
-		skills -= 2
+		self.disminuirSkills(2)
 		escoba.recibeGolpe()
 	}
 }
