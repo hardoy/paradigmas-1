@@ -71,6 +71,7 @@ mientras que los de Montague quedan en 33."{
 	
 	ginnyWeasley.ganaLaQuaffle()
 	dracoMalfoy.cambiarActividad(persecucion)
+	dracoMalfoy.encontroSnitch(true)
 	dracoMalfoy.cambiarDistancia(100)
 	
 	assert.equals(3, fredWeasley.equipoRival().blancosUtiles().size()) // aca falla porque size() da 2 en vez de 3
