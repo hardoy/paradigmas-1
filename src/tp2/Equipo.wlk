@@ -42,7 +42,7 @@ class Equipo {
 		if(self.tieneLaQuaffle()){
 			rival.ganaLaQuaffle()
 		} else {
-			new NoPuedePerderLaQuaffle()
+			throw new NoPuedePerderLaQuaffle()
 		}
 	}
 	
